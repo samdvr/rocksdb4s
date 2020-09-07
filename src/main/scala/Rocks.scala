@@ -34,7 +34,7 @@ object Rocks {
       F.delay(db.delete(key))
 
     override def close: F[Unit] =
-      F.delay(db.close())
+      F.delay(db.close)
 
     override def compactRange(begin: Array[Byte], end: Array[Byte]): F[Unit] =
       F.delay(db.compactRange(begin, end))
