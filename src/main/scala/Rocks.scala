@@ -1,8 +1,8 @@
 import cats.effect.Sync
-import org.rocksdb.{ColumnFamilyHandle, RocksDB}
+import org.rocksdb.{RocksDB}
 import fs2._
-
 import scala.jdk.CollectionConverters.{CollectionHasAsScala, SeqHasAsJava}
+
 trait Rocks[F[_]] {
   def get(key: Array[Byte]): Stream[F, Array[Byte]]
 
