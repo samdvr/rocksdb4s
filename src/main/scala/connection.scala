@@ -2,20 +2,17 @@ import cats.effect.{Resource, Sync}
 import cats.implicits._
 import org.rocksdb.RocksDB
 
-object connection {
+object Connection {
   def load[F[_]](options: org.rocksdb.Options, pathToDB: String)(
-    implicit F: Sync[F]): Resource[F, RocksDB] = {
+    implicit F: Sync[F]): Resource[F, Rocks[F]] = {
 
-    def acquire: F[RocksDB] =
+    def acquire: F[Rocks[F]] =
       F.delay(RocksDB.loadLibrary()) *>
-        F.delay( RocksDB.open(options, pathToDB))
+        F.delay( Rocks[F]( RocksDB.open(options, pathToDB)))
 
-    def release: RocksDB => F[Unit] = db => F.delay(db.close())
-
-    Resource.make(acquire)(release)
+    Resource.make(acquire)(_.close)
 
   }
 
+
 }
-
-
